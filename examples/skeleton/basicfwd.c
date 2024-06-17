@@ -145,7 +145,7 @@ lcore_main(void)
 			struct rte_mbuf *bufs[BURST_SIZE];
 			const uint16_t nb_rx = rte_eth_rx_burst(port, 0,
 					bufs, BURST_SIZE);
-
+            printf("Received %d packets\n", nb_rx);
 			if (unlikely(nb_rx == 0))
 				continue;
 
