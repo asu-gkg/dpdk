@@ -122,22 +122,26 @@ lcore_main(void)
 	 * Check that the port is on the same NUMA node as the polling thread
 	 * for best performance.
 	 */
-	RTE_ETH_FOREACH_DEV(port)
-		if (rte_eth_dev_socket_id(port) >= 0 &&
-				rte_eth_dev_socket_id(port) !=
-						(int)rte_socket_id())
-			printf("WARNING, port %u is on remote NUMA node to "
-					"polling thread.\n\tPerformance will "
-					"not be optimal.\n", port);
+	RTE_ETH_FOREACH_DEV(port){
+        if (rte_eth_dev_socket_id(port) >= 0 &&
+            rte_eth_dev_socket_id(port) !=
+            (int)rte_socket_id())
+            printf("WARNING, port %u is on remote NUMA node to "
+                   "polling thread.\n\tPerformance will "
+                   "not be optimal.\n", port);
+
+        struct rte_ether_addr addr;
+        rte_eth_macaddr_get(port, &addr);
+        printf("MAC address: %02x:%02x:%02x:%02x:%02x:%02x\n",
+               addr.addr_bytes[0], addr.addr_bytes[1], addr.addr_bytes[2],
+               addr.addr_bytes[3], addr.addr_bytes[4], addr.addr_bytes[5]);
+    }
+
 
 	printf("\nCore %u forwarding packets. [Ctrl+C to quit]\n",
 			rte_lcore_id());
 
-    struct rte_ether_addr addr;
-    rte_eth_macaddr_get(port_id, &addr);
-    printf("MAC address: %02x:%02x:%02x:%02x:%02x:%02x\n",
-           addr.addr_bytes[0], addr.addr_bytes[1], addr.addr_bytes[2],
-           addr.addr_bytes[3], addr.addr_bytes[4], addr.addr_bytes[5]);
+
 
 
     /* Main work of application loop. 8< */
