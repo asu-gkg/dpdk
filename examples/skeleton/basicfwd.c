@@ -126,7 +126,7 @@ static __rte_noreturn void
 lcore_main(void)
 {
 	uint16_t port;
-
+    unsigned lcore_id;
 	/*
 	 * Check that the port is on the same NUMA node as the polling thread
 	 * for best performance.
