@@ -135,6 +135,10 @@ lcore_main(void)
         printf("MAC address: %02x:%02x:%02x:%02x:%02x:%02x\n",
                addr.addr_bytes[0], addr.addr_bytes[1], addr.addr_bytes[2],
                addr.addr_bytes[3], addr.addr_bytes[4], addr.addr_bytes[5]);
+
+        char if_name[20];
+        rte_eth_dev_get_name_by_port(port_id, if_name);
+        printf("Interface name: %s\n", if_name);
     }
 
 
