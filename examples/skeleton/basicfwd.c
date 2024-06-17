@@ -137,7 +137,7 @@ lcore_main(void)
                addr.addr_bytes[3], addr.addr_bytes[4], addr.addr_bytes[5]);
 
         char if_name[20];
-        rte_eth_dev_get_name_by_port(port_id, if_name);
+        rte_eth_dev_get_name_by_port(port, if_name);
         printf("Interface name: %s\n", if_name);
     }
 
