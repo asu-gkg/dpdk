@@ -107,6 +107,15 @@ port_init(uint16_t port, struct rte_mempool *mbuf_pool)
 }
 /* >8 End of main functional part of port initialization. */
 
+static int
+lcore_hello(__rte_unused void *arg)
+{
+    unsigned lcore_id;
+    lcore_id = rte_lcore_id();
+    printf("hello from core %u\n", lcore_id);
+    return 0;
+}
+
 /*
  * The lcore main. This is the main thread that does the work, reading from
  * an input port and writing to an output port.
@@ -132,6 +141,13 @@ lcore_main(void)
 
 	printf("\nCore %u forwarding packets. [Ctrl+C to quit]\n",
 			rte_lcore_id());
+
+    /* Launches the function on each lcore. 8< */
+    RTE_LCORE_FOREACH_WORKER(lcore_id) {
+        /* Simpler equivalent. 8< */
+        rte_eal_remote_launch(lcore_hello, NULL, lcore_id);
+        /* >8 End of simpler equivalent. */
+    }
 
 	/* Main work of application loop. 8< */
 	for (;;) {
