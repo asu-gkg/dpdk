@@ -128,7 +128,7 @@ lcore_hello(__rte_unused void *arg)
         // 填充数据包的内容，比如设置目的MAC地址、源MAC地址、IP头部等
 
         bufs[0] = mbuf;
-        const uint16_t nb_tx = rte_eth_tx_burst(port_id, 0, bufs, 1); // 发送单个数据包
+        const uint16_t nb_tx = rte_eth_tx_burst(0, 0, bufs, 1); // 发送单个数据包
         printf("Sent %d packets\n", nb_tx);
     }
 
