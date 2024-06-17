@@ -107,35 +107,6 @@ port_init(uint16_t port, struct rte_mempool *mbuf_pool)
 }
 /* >8 End of main functional part of port initialization. */
 
-static int
-lcore_hello(__rte_unused void *arg)
-{
-    unsigned lcore_id;
-    lcore_id = rte_lcore_id();
-    if (lcore_id != 1) {
-        return 0;
-    }
-
-
-    while (1){
-        printf("hello from core %u\n", lcore_id);
-
-        struct rte_mbuf *bufs[BURST_SIZE];
-
-        // 创建一个数据包，并填充数据
-        struct rte_mbuf *mbuf = rte_pktmbuf_alloc(rte_pktmbuf_pool_create("MBUF_POOL",
-                                                                          TX_RING_SIZE, 32, 0, RTE_MBUF_DEFAULT_BUF_SIZE, rte_socket_id()));
-        // 填充数据包的内容，比如设置目的MAC地址、源MAC地址、IP头部等
-
-        bufs[0] = mbuf;
-        const uint16_t nb_tx = rte_eth_tx_burst(0, 0, bufs, 1); // 发送单个数据包
-        printf("Sent %d packets\n", nb_tx);
-    }
-
-
-    return 0;
-}
-
 /*
  * The lcore main. This is the main thread that does the work, reading from
  * an input port and writing to an output port.
@@ -162,14 +133,14 @@ lcore_main(void)
 	printf("\nCore %u forwarding packets. [Ctrl+C to quit]\n",
 			rte_lcore_id());
 
-    /* Launches the function on each lcore. 8< */
-    RTE_LCORE_FOREACH_WORKER(lcore_id) {
-        /* Simpler equivalent. 8< */
-        rte_eal_remote_launch(lcore_hello, NULL, lcore_id);
-        /* >8 End of simpler equivalent. */
-    }
+    struct rte_ether_addr addr;
+    rte_eth_macaddr_get(port_id, &addr);
+    printf("MAC address: %02x:%02x:%02x:%02x:%02x:%02x\n",
+           addr.addr_bytes[0], addr.addr_bytes[1], addr.addr_bytes[2],
+           addr.addr_bytes[3], addr.addr_bytes[4], addr.addr_bytes[5]);
 
-	/* Main work of application loop. 8< */
+
+    /* Main work of application loop. 8< */
 	for (;;) {
 		/*
 		 * Receive packets on a port and forward them on the paired
