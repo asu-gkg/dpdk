@@ -140,7 +140,7 @@ lcore_main(void)
 		 * port. The mapping is 0 -> 1, 1 -> 0, 2 -> 3, 3 -> 2, etc.
 		 */
 		RTE_ETH_FOREACH_DEV(port) {
-
+            printf("port: %d\n", port);
 			/* Get burst of RX packets, from first port of pair. */
 			struct rte_mbuf *bufs[BURST_SIZE];
 			const uint16_t nb_rx = rte_eth_rx_burst(port, 0,
@@ -149,16 +149,16 @@ lcore_main(void)
 			if (unlikely(nb_rx == 0))
 				continue;
 
-			/* Send burst of TX packets, to second port of pair. */
-			const uint16_t nb_tx = rte_eth_tx_burst(port ^ 1, 0,
-					bufs, nb_rx);
-
-			/* Free any unsent packets. */
-			if (unlikely(nb_tx < nb_rx)) {
-				uint16_t buf;
-				for (buf = nb_tx; buf < nb_rx; buf++)
-					rte_pktmbuf_free(bufs[buf]);
-			}
+//			/* Send burst of TX packets, to second port of pair. */
+//			const uint16_t nb_tx = rte_eth_tx_burst(port ^ 1, 0,
+//					bufs, nb_rx);
+//
+//			/* Free any unsent packets. */
+//			if (unlikely(nb_tx < nb_rx)) {
+//				uint16_t buf;
+//				for (buf = nb_tx; buf < nb_rx; buf++)
+//					rte_pktmbuf_free(bufs[buf]);
+//			}
 		}
 	}
 	/* >8 End of loop. */
