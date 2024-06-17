@@ -194,6 +194,7 @@ main(int argc, char *argv[])
 
 
 	/* Creates a new mempool in memory to hold the mbufs. */
+    printf("try pool_create\n");
 
 	/* Allocates mempool to hold the mbufs. 8< */
 	mbuf_pool = rte_pktmbuf_pool_create("MBUF_POOL", NUM_MBUFS * nb_ports,
@@ -203,7 +204,7 @@ main(int argc, char *argv[])
 	if (mbuf_pool == NULL)
 		rte_exit(EXIT_FAILURE, "Cannot create mbuf pool\n");
 
-    printf("pool_create success, noe enter for loop\n");
+    printf("pool_create success, now enter for loop\n");
 
 	/* Initializing all ports. 8< */
 	RTE_ETH_FOREACH_DEV(portid)
