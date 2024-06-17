@@ -188,8 +188,9 @@ main(int argc, char *argv[])
 	/* Check that there is an even number of ports to send/receive on. */
 	nb_ports = rte_eth_dev_count_avail();
     printf("nb_ports: %d\n", nb_ports);
-	if (nb_ports < 2 || (nb_ports & 1)){
-        rte_exit(EXIT_FAILURE, "Warning: number of ports is not even\n");
+    if (nb_ports < 2 || (nb_ports & 1)) {
+        printf("Warning: number of ports is not even\n");
+//        rte_exit(EXIT_FAILURE, "Error: number of ports is not even\n");
     }
 
 
