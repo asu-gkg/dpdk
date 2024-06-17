@@ -112,7 +112,27 @@ lcore_hello(__rte_unused void *arg)
 {
     unsigned lcore_id;
     lcore_id = rte_lcore_id();
-    printf("hello from core %u\n", lcore_id);
+    if (lcore_id != 1) {
+        return 0;
+    }
+
+
+    while (1){
+        printf("hello from core %u\n", lcore_id);
+
+        struct rte_mbuf *bufs[BURST_SIZE];
+
+        // 创建一个数据包，并填充数据
+        struct rte_mbuf *mbuf = rte_pktmbuf_alloc(rte_pktmbuf_pool_create("MBUF_POOL",
+                                                                          TX_RING_SIZE, 32, 0, RTE_MBUF_DEFAULT_BUF_SIZE, rte_socket_id()));
+        // 填充数据包的内容，比如设置目的MAC地址、源MAC地址、IP头部等
+
+        bufs[0] = mbuf;
+        const uint16_t nb_tx = rte_eth_tx_burst(port_id, 0, bufs, 1); // 发送单个数据包
+        printf("Sent %d packets\n", nb_tx);
+    }
+
+
     return 0;
 }
 
