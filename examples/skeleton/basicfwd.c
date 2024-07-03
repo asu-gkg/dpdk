@@ -154,6 +154,7 @@ lcore_main(void)
 		 * Receive packets on a port and forward them on the paired
 		 * port. The mapping is 0 -> 1, 1 -> 0, 2 -> 3, 3 -> 2, etc.
 		 */
+
 		RTE_ETH_FOREACH_DEV(port) {
 
 			/* Get burst of RX packets, from first port of pair. */
@@ -225,10 +226,17 @@ main(int argc, char *argv[])
     printf("pool_create success, now enter for loop\n");
 
 	/* Initializing all ports. 8< */
-	RTE_ETH_FOREACH_DEV(portid)
-		if (port_init(portid, mbuf_pool) != 0)
-			rte_exit(EXIT_FAILURE, "Cannot init port %"PRIu16 "\n",
-					portid);
+	RTE_ETH_FOREACH_DEV(portid){
+        if (portid==0){ // only use port1
+            printf("Use port0 to receive ssh packet\n");
+            continue;
+        }
+        if (port_init(portid, mbuf_pool) != 0){
+            rte_exit(EXIT_FAILURE, "Cannot init port %"PRIu16 "\n",
+                    portid);
+        }
+    }
+
 	/* >8 End of initializing all ports. */
 
 	if (rte_lcore_count() > 1)
